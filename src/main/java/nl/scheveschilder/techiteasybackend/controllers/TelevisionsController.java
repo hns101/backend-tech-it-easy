@@ -13,8 +13,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/tv")
+@RequestMapping("/televisions")
 public class TelevisionsController {
+
+
 
     private final TelevisionRepository repos;
 
@@ -106,7 +108,7 @@ public class TelevisionsController {
             repos.save(televisionFound);
 
         } else {
-            throw new RecordNotFoundException("Deze Televisie Id " + id + " bestaat niet 😭");
+            throw new RecordNotFoundException("Deze Televisie " + id + " bestaat niet 😭");
         }
         return ResponseEntity.ok("Televisie " + tv.getName() + " aangepast op Id" + id);
     }
