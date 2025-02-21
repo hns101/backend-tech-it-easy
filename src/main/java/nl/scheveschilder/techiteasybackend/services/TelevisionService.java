@@ -5,6 +5,7 @@ import nl.scheveschilder.techiteasybackend.dtos.TelevisionInputDto;
 import nl.scheveschilder.techiteasybackend.exceptions.RecordNotFoundException;
 import nl.scheveschilder.techiteasybackend.models.Television;
 import nl.scheveschilder.techiteasybackend.repositories.TelevisionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 @Service
 public class TelevisionService {
 
+    @Autowired
     private final TelevisionRepository repos;
 
     public TelevisionService(TelevisionRepository repos) {
