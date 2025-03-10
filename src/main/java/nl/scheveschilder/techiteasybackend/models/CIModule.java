@@ -1,6 +1,9 @@
 package nl.scheveschilder.techiteasybackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "cimodules")
@@ -12,6 +15,11 @@ public class CIModule {
     private String name;
     private String type;
     private Double price;
+
+    @OneToMany(mappedBy = "ciModule")
+    @JsonIgnore
+    List<Television> televisions;
+
 
     public CIModule() {
     }
