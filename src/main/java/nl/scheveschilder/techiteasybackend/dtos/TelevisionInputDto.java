@@ -1,50 +1,158 @@
 package nl.scheveschilder.techiteasybackend.dtos;
 
-import nl.scheveschilder.techiteasybackend.models.Television;
+import jakarta.validation.constraints.*;
 
 public class TelevisionInputDto {
-    public static Television fromDtoToTelevision(TelevisionDto televisionDto) {
-        Television television = new Television();
-        television.setId(televisionDto.id);
-        television.setType(televisionDto.type);
-        television.setBrand(televisionDto.brand);
-        television.setName(televisionDto.name);
-        television.setPrice(televisionDto.price);
-        television.setAvailableSize(televisionDto.availableSize);
-        television.setRefreshRate(televisionDto.refreshRate);
-        television.setScreenType(televisionDto.screenType);
-        television.setScreenQuality(televisionDto.screenQuality);
-        television.setSmartTV(televisionDto.smartTV);
-        television.setWifi(televisionDto.wifi);
-        television.setVoiceControl(televisionDto.voiceControl);
-        television.setHdr(televisionDto.hdr);
-        television.setBluetooth(televisionDto.bluetooth);
-        television.setAmbiLight(televisionDto.ambiLight);
-        television.setOriginalStock(televisionDto.originalStock);
-        television.setSold(televisionDto.sold);
-        return television;
+    @NotNull(message = "Type is required") // Type moet ingevuld verplicht worden in je JSON, je krijgt een message als je dit niet doet.
+    private String type;
+    @NotNull(message = "Brand is required")
+    private String brand;
+    @Size(max = 20, message = "Name must be between 0-20 characters") // maximale lengte van de string, min is automatisch 0.
+    private String name;
+    @Positive(message = "Price must be higher than zero")
+    private Double price;
+    private Double availableSize;
+    private Double refreshRate;
+    private String screenType;
+    private String screenQuality;
+    private Boolean smartTv;
+    private Boolean wifi;
+    private Boolean voiceControl;
+    @AssertTrue(message = "All television must be hdr minimum")
+    private Boolean hdr;
+    private Boolean bluetooth;
+    private Boolean ambiLight;
+    @PositiveOrZero(message = "Television cannot have negative stock")
+    private Integer originalStock;
+    private Integer sold;
+
+
+    public String getType() {
+        return type;
     }
 
-    public static TelevisionDto fromTelevisionToDto(Television television) {
-        TelevisionDto televisionDto = new TelevisionDto();
-        televisionDto.id = television.getId();
-        televisionDto.type = television.getType();
-        televisionDto.brand = television.getBrand();
-        televisionDto.name = television.getName();
-        televisionDto.price = television.getPrice();
-        televisionDto.availableSize = television.getAvailableSize();
-        televisionDto.refreshRate = television.getRefreshRate();
-        televisionDto.screenType = television.getScreenType();
-        televisionDto.screenQuality = television.getScreenQuality();
-        televisionDto.smartTV = television.isSmartTV();
-        televisionDto.wifi = television.isWifi();
-        televisionDto.voiceControl = television.isVoiceControl();
-        televisionDto.hdr = television.isHdr();
-        televisionDto.bluetooth = television.isBluetooth();
-        televisionDto.ambiLight = television.isAmbiLight();
-        televisionDto.originalStock = television.getOriginalStock();
-        televisionDto.sold = television.getSold();
-        return televisionDto;
+    public String getBrand() {
+        return brand;
     }
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public Double getAvailableSize() {
+        return availableSize;
+    }
+
+    public Double getRefreshRate() {
+        return refreshRate;
+    }
+
+    public String getScreenType() {
+        return screenType;
+    }
+
+    public String getScreenQuality() {
+        return screenQuality;
+    }
+
+    public Boolean getSmartTv() {
+        return smartTv;
+    }
+
+    public Boolean getWifi() {
+        return wifi;
+    }
+
+    public Boolean getVoiceControl() {
+        return voiceControl;
+    }
+
+    public Boolean getHdr() {
+        return hdr;
+    }
+
+    public Boolean getBluetooth() {
+        return bluetooth;
+    }
+
+    public Boolean getAmbiLight() {
+        return ambiLight;
+    }
+
+    public Integer getOriginalStock() {
+        return originalStock;
+    }
+
+    public Integer getSold() {
+        return sold;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setAvailableSize(Double availableSize) {
+        this.availableSize = availableSize;
+    }
+
+    public void setRefreshRate(Double refreshRate) {
+        this.refreshRate = refreshRate;
+    }
+
+    public void setScreenType(String screenType) {
+        this.screenType = screenType;
+    }
+
+    public void setScreenQuality(String screenQuality) {
+        this.screenQuality = screenQuality;
+    }
+
+    public void setSmartTv(Boolean smartTv) {
+        this.smartTv = smartTv;
+    }
+
+    public void setWifi(Boolean wifi) {
+        this.wifi = wifi;
+    }
+
+    public void setVoiceControl(Boolean voiceControl) {
+        this.voiceControl = voiceControl;
+    }
+
+    public void setHdr(Boolean hdr) {
+        this.hdr = hdr;
+    }
+
+    public void setBluetooth(Boolean bluetooth) {
+        this.bluetooth = bluetooth;
+    }
+
+    public void setAmbiLight(Boolean ambiLight) {
+        this.ambiLight = ambiLight;
+    }
+
+    public void setOriginalStock(Integer originalStock) {
+        this.originalStock = originalStock;
+    }
+
+    public void setSold(Integer sold) {
+        this.sold = sold;
+    }
 }
+

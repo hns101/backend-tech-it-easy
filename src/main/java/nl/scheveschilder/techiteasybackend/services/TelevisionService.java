@@ -6,44 +6,74 @@ import nl.scheveschilder.techiteasybackend.exceptions.RecordNotFoundException;
 import nl.scheveschilder.techiteasybackend.models.Television;
 import nl.scheveschilder.techiteasybackend.repositories.TelevisionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TelevisionService {
 
-    @Autowired
+//    @Autowired
     private final TelevisionRepository repos;
 
     public TelevisionService(TelevisionRepository repos) {
         this.repos = repos;
     }
 
-    public Television getTelevision(Long id) {
-        return this.repos.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException("Television " + id + " not found😖"));
+
+    public TelevisionDto getTelevision(Long id) {
+        Optional<Television> televisionOptional = repos.findById(id);
+        if (televisionOptional.isPresent()) {
+            Television tv = televisionOptional.get();
+            return fromTelevisionToDto(tv);
+        } else {
+            throw new RecordNotFoundException("Television " + id + " not found😖");
+        }
+
     }
 
-    public List<Television> getAllTelevision() {
-        return this.repos.findAll();
+    public List<TelevisionDto> getAllTelevisions() {
+        List<Television> tvList = repos.findAll();
+        List<TelevisionDto> tvDtoList = new ArrayList<>();
+
+        for (Television tv : tvList) {
+            TelevisionDto dto = fromTelevisionToDto(tv);
+            tvDtoList.add(dto);
+        }
+
+        return tvDtoList;
+    }
+
+    public List<TelevisionDto> getAllTelevisionsByBrand(String brand) {
+        List<Television> tvList = repos.findAllTelevisionsByBrandEqualsIgnoreCase(brand);
+        List<TelevisionDto> tvDtoList = new ArrayList<>();
+
+        for (Television tv : tvList) {
+            TelevisionDto dto = fromTelevisionToDto(tv);
+            tvDtoList.add(dto);
+        }
+        return tvDtoList;
     }
 
 
-    public void createTelevision(TelevisionDto televisionDto) {
-        Television television = TelevisionInputDto.fromDtoToTelevision(televisionDto);
-        this.repos.save(television);
+    public TelevisionDto createTelevision(TelevisionInputDto dto) {
+
+        Television television = fromDtoToTelevision(dto);
+        repos.save(television);
+
+        return fromTelevisionToDto(television);
     }
 
-    public void deleteTelevision(Long id) {
-        this.repos.deleteById(id);
+    public void deleteTelevision(@RequestBody Long id) {
+        repos.deleteById(id);
     }
 
-    public ResponseEntity<String> updateTelevision(Long id, Television tv) {
+    public TelevisionDto updateTelevision(Long id, TelevisionInputDto tv) {
 
-        Optional<Television> optionalTelevision= this.repos.findById(id);
+        Optional<Television> optionalTelevision= repos.findById(id);
         Television televisionFound = optionalTelevision.get();
         if (optionalTelevision.isPresent()) {
 
@@ -74,23 +104,23 @@ public class TelevisionService {
             if (tv.getScreenQuality() != null) {
                 televisionFound.setScreenQuality(tv.getScreenQuality());
             }
-            if (tv.isSmartTV()) {
-                televisionFound.setSmartTV(tv.isSmartTV());
+            if (tv.getSmartTv()) {
+                televisionFound.setSmartTV(tv.getSmartTv());
             }
-            if (tv.isWifi()) {
-                televisionFound.setWifi(tv.isWifi());
+            if (tv.getWifi()) {
+                televisionFound.setWifi(tv.getWifi());
             }
-            if (tv.isVoiceControl()) {
-                televisionFound.setVoiceControl(tv.isVoiceControl());
+            if (tv.getVoiceControl()) {
+                televisionFound.setVoiceControl(tv.getVoiceControl());
             }
-            if (tv.isHdr()) {
-                televisionFound.setHdr(tv.isHdr());
+            if (tv.getHdr()) {
+                televisionFound.setHdr(tv.getHdr());
             }
-            if (tv.isBluetooth()) {
-                televisionFound.setBluetooth(tv.isBluetooth());
+            if (tv.getBluetooth()) {
+                televisionFound.setBluetooth(tv.getBluetooth());
             }
-            if (tv.isAmbiLight()) {
-                televisionFound.setAmbiLight(tv.isAmbiLight());
+            if (tv.getAmbiLight()) {
+                televisionFound.setAmbiLight(tv.getAmbiLight());
             }
             if (tv.getOriginalStock() != 0) {
                 televisionFound.setOriginalStock(tv.getOriginalStock());
@@ -100,11 +130,60 @@ public class TelevisionService {
             }
             Television save = this.repos.save(televisionFound);
 
+            return fromTelevisionToDto(save);
+
         } else {
             throw new RecordNotFoundException("This television " + id + " does not exist 😭");
         }
-        return ResponseEntity.ok("Television " +  televisionFound.getName() + " Updated on Id" + id);
     }
+
+
+    // Mapper
+    public static Television fromDtoToTelevision(TelevisionInputDto dto) {
+        Television television = new Television();
+
+        television.setType(dto.getType());
+        television.setBrand(dto.getBrand());
+        television.setName(dto.getName());
+        television.setPrice(dto.getPrice());
+        television.setAvailableSize(dto.getAvailableSize());
+        television.setRefreshRate(dto.getRefreshRate());
+        television.setScreenType(dto.getScreenType());
+        television.setScreenQuality(dto.getScreenQuality());
+        television.setSmartTV(dto.getSmartTv());
+        television.setWifi(dto.getWifi());
+        television.setVoiceControl(dto.getVoiceControl());
+        television.setHdr(dto.getHdr());
+        television.setBluetooth(dto.getBluetooth());
+        television.setAmbiLight(dto.getAmbiLight());
+        television.setOriginalStock(dto.getOriginalStock());
+        television.setSold(dto.getSold());
+        return television;
+    }
+
+    public static TelevisionDto fromTelevisionToDto(Television television) {
+        TelevisionDto televisionDto = new TelevisionDto();
+        televisionDto.id = television.getId();
+        televisionDto.type = television.getType();
+        televisionDto.brand = television.getBrand();
+        televisionDto.name = television.getName();
+        televisionDto.price = television.getPrice();
+        televisionDto.availableSize = television.getAvailableSize();
+        televisionDto.refreshRate = television.getRefreshRate();
+        televisionDto.screenType = television.getScreenType();
+        televisionDto.screenQuality = television.getScreenQuality();
+        televisionDto.smartTV = television.isSmartTV();
+        televisionDto.wifi = television.isWifi();
+        televisionDto.voiceControl = television.isVoiceControl();
+        televisionDto.hdr = television.isHdr();
+        televisionDto.bluetooth = television.isBluetooth();
+        televisionDto.ambiLight = television.isAmbiLight();
+        televisionDto.originalStock = television.getOriginalStock();
+        televisionDto.sold = television.getSold();
+        return televisionDto;
+    }
+
+
 
 }
 

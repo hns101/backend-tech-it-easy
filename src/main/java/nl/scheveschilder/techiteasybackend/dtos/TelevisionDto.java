@@ -17,7 +17,7 @@ public class TelevisionDto {
 
     public double price;
     public double availableSize;
-    public int refreshRate;
+    public double refreshRate;
     public String screenType;
     public String screenQuality;
     public boolean smartTV;

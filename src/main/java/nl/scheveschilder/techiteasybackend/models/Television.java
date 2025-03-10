@@ -14,7 +14,7 @@ public class Television {
     private String name;
     private double price;
     private double availableSize;
-    private int refreshRate;
+    private double refreshRate;
     private String screenType;
     private String screenQuality;
     private boolean smartTV;
@@ -101,11 +101,11 @@ public class Television {
         this.availableSize = availableSize;
     }
 
-    public int getRefreshRate() {
+    public double getRefreshRate() {
         return refreshRate;
     }
 
-    public void setRefreshRate(int refreshRate) {
+    public void setRefreshRate(double refreshRate) {
         this.refreshRate = refreshRate;
     }
 
