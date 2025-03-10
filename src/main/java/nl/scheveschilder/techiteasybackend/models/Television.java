@@ -2,6 +2,8 @@ package nl.scheveschilder.techiteasybackend.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "televisions")
 public class Television {
@@ -25,6 +27,23 @@ public class Television {
     private boolean ambiLight;
     private int originalStock;
     private int sold;
+
+
+    @OneToOne
+    RemoteController remoteController;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ci_module_id")
+    private CIModule ciModule;
+
+    @ManyToMany
+    @JoinTable(
+            name = "television_wallbrackets",
+            joinColumns = @JoinColumn(name = "television"),
+            inverseJoinColumns = @JoinColumn(name = "wallbracket")
+    )
+    List<WallBracket> wallBrackets;
+
 
     public Television() {
     }
@@ -52,6 +71,13 @@ public class Television {
         this.sold = sold;
     }
 
+    public RemoteController getRemoteController() {
+        return remoteController;
+    }
+
+    public void setRemoteController(RemoteController remoteController) {
+        this.remoteController = remoteController;
+    }
 
     public Long getId() {
         return id;
@@ -187,5 +213,21 @@ public class Television {
 
     public void setSold(int sold) {
         this.sold = sold;
+    }
+
+    public CIModule getCiModule() {
+        return ciModule;
+    }
+
+    public void setCiModule(CIModule ciModule) {
+        this.ciModule = ciModule;
+    }
+
+    public List<WallBracket> getWallBrackets() {
+        return wallBrackets;
+    }
+
+    public void setWallBrackets(List<WallBracket> wallBrackets) {
+        this.wallBrackets = wallBrackets;
     }
 }
