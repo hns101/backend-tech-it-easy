@@ -3,7 +3,7 @@ package nl.scheveschilder.techiteasybackend.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="televisions")
+@Table(name = "televisions")
 public class Television {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
